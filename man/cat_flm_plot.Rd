@@ -1,0 +1,61 @@
+\name{cat_flm_plot}
+\alias{cat_flm_plot}
+
+\title{Plot Functional Linear Model Analysis Results of a Categorical Type}
+\description{This function produce either one or two plots: An effect of a categorical (factor) covariate on activity 
+	values by time and potentially the F-test for the effect of the categorical covariate.}
+\usage{cat_flm_plot(smoothdata, matchresults, flmresults, ftest, 
+	nperm, lb, xat, varname, col, ylim, L)
+}
+
+\arguments{
+  \item{smoothdata}{List output from the \code{fda.smoothdata} function}
+  \item{matchresults}{List output from the \code{matchid} function.}
+  \item{flmresults}{List output from the \code{flm_cate} function.}
+  \item{ftest}{A logic value indicating whether to implement F test or not. F test will be implement if \code{ftest is TRUE}.}
+  \item{nperm}{The number of permutations for the F-test.}
+  \item{lb}{X axis labels.}
+  \item{xat}{X axis label positions.}
+  \item{varname}{Name of categorical covariate.}
+  \item{col}{Colors for levels of the predictor.}
+  \item{ylim}{Y axis limits for activity plot.}
+  \item{L}{The length of the time points.}
+}
+
+\value{One plot of the estimated group means and a possible second plot of the F-test results.}
+
+\author{William Shannon, Tao Li, Hong Xian, Jia Wang, Elena Deych, Carlos Gonzalez}
+
+\examples{
+data(act_29pt)
+data(clinic_29pt_ahi)
+
+colnames(act_29pt) <- sub("X", "", colnames(act_29pt))
+data <- as.matrix(act_29pt[,-1])
+ahi <- clinic_29pt_ahi
+
+ahi$ahicat <- as.factor(ifelse(ahi$AHI >= 0 & ahi$AHI <= 5, 1, 
+				ifelse(ahi$AHI > 5 & ahi$AHI <= 15, 2,
+				ifelse(ahi$AHI > 15 & ahi$AHI <= 30, 3,
+				ifelse(ahi$AHI > 30, 4, 0)))))
+
+matchid <- fda.matchid(mat=data, acov=ahi[,-2] , type="factor",
+		grouplab=c('normal', 'mild', 'moderate', 'severe'))
+FDcatahi <- fda.smoothdata(matchid, nbasis=9, basistype="fourier")
+
+geftFDcatahi <- flm_cate(FDcatahi, nbasis=9, basistype="fourier") 
+
+L <- nrow(data)
+lb <- c("Midnight", "6AM", "Noon", "6PM", "Midnight") 
+xat <- c(0, L/4, L/2, 3*L/4, L)
+
+xlim <- c(0, L) 
+ylim <- c(0, max(predict(geftFDcatahi$freg$yhatfdobj)) + 100)
+
+cat_flm_plot(smoothdata=FDcatahi, matchresults=matchid, 
+	flmresults=geftFDcatahi, ftest=TRUE, nperm=5, lb=lb, 
+	xat=xat, varname="AHI", col=c(1:4), ylim=ylim, L=L)
+}
+
+
+
