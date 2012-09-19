@@ -5,7 +5,7 @@
 \description{This function produce either one or two plots: An effect of a categorical (factor) covariate on activity 
 	values by time and potentially the F-test for the effect of the categorical covariate.}
 \usage{cat_flm_plot(smoothdata, matchresults, flmresults, ftest, 
-	nperm, lb, xat, varname, col, ylim, L)
+	nperm, lb, xat, varname, col, ylim, L, xlab="Time", ylab="Activity")
 }
 
 \arguments{
@@ -20,6 +20,8 @@
   \item{col}{Colors for levels of the predictor.}
   \item{ylim}{Y axis limits for activity plot.}
   \item{L}{The length of the time points.}
+  \item{xlab}{The label for the x-axis.}
+  \item{ylab}{The label for the y-axis.}
 }
 
 \value{One plot of the estimated group means and a possible second plot of the F-test results.}
@@ -40,7 +42,7 @@ ahi$ahicat <- as.factor(ifelse(ahi$AHI >= 0 & ahi$AHI <= 5, 1,
 				ifelse(ahi$AHI > 30, 4, 0)))))
 
 matchid <- fda.matchid(mat=data, acov=ahi[,-2] , type="factor",
-		grouplab=c('normal', 'mild', 'moderate', 'severe'))
+		grouplab=c("normal", "mild", "moderate", "severe"))
 FDcatahi <- fda.smoothdata(matchid, nbasis=9, basistype="fourier")
 
 geftFDcatahi <- flm_cate(FDcatahi, nbasis=9, basistype="fourier") 
@@ -49,7 +51,6 @@ L <- nrow(data)
 lb <- c("Midnight", "6AM", "Noon", "6PM", "Midnight") 
 xat <- c(0, L/4, L/2, 3*L/4, L)
 
-xlim <- c(0, L) 
 ylim <- c(0, max(predict(geftFDcatahi$freg$yhatfdobj)) + 100)
 
 cat_flm_plot(smoothdata=FDcatahi, matchresults=matchid, 

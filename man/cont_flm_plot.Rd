@@ -4,7 +4,8 @@
 \title{Plot Functional Linear Model Analysis Results of a Continuous Type}
 \description{This function produces two plots: An effect of a continuous covariate on activity values by time and the F-test for the effect of the continuous covariate.}
 \usage{cont_flm_plot(smoothdata, matchresults, flmresults, xlim, ylim, 
-	ftest, nperm, lb, xat, yboxlow, yboxhigh, ytext, labelp, L)
+	ftest, nperm, lb, xat, yboxlow, yboxhigh, ytext, labelp, L, 
+	xlab="Time", ylab="Activity")
 }
 
 \arguments{
@@ -22,6 +23,8 @@
   \item{ytext}{Y axis position of the scale values of the legend box}
   \item{labelp}{Y axis position of the predictor variable label on the legend box.}
   \item{L}{The length of the time points.}
+  \item{xlab}{The label for the x-axis.}
+  \item{ylab}{The label for the y-axis.}
 }
 
 \value{One plot of the estimated group means and a possible second plot of the F-test results.}
@@ -38,20 +41,22 @@ data <- as.matrix(act_29pt[,-1])
 matchid  <- fda.matchid(mat=data, acov=clinic_29pt_ahi, type="contin")
 FDcont <- fda.smoothdata(matchid, nbasis=9, basistype="fourier")
 
-geftFDcont <- flm_cate(FDcont ,basistype="fourier", nbasis=9)
+geftFDcont <- flm_cate(FDcont, basistype="fourier", nbasis=9)
 		
 L <- nrow(data)
 lb <- c("Midnight", "6AM", "Noon", "6PM", "Midnight") 
 xat <- c(0, L/4, L/2, 3*L/4, L)
 
-xlim <- c(0, L) 
-ylim <- c(min(predict(geftFDcont$freg$yhatfdobj)), 
-	max(predict(geftFDcont$freg$yhatfdobj)) + 100)
+predictedFLM <- predict(geftFDcont$freg$yhatfdobj)
+maxFLM <- max(predictedFLM)
 
-yboxlow <- max(predict(geftFDcont$freg$yhatfdobj)) - 100 
-yboxhigh <- max(predict(geftFDcont$freg$yhatfdobj))
-ytext <- max(predict(geftFDcont$freg$yhatfdobj)) + 20
-labelp <- max(predict(geftFDcont$freg$yhatfdobj)) - 110
+xlim <- c(0, L) 
+ylim <- c(min(predictedFLM), maxFLM + 100)
+
+yboxlow <- maxFLM - 100 
+yboxhigh <- maxFLM
+ytext <- maxFLM + 20
+labelp <-maxFLM - 110
 
 cont_flm_plot(smoothdata=FDcont, matchresults=matchid, 
 	flmresults=geftFDcont, xlim=xlim, ylim=ylim, ftest=TRUE, 

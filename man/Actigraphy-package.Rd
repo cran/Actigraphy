@@ -8,18 +8,18 @@
 	\tabular{ll}{
 		Package: \tab Actigraphy\cr
 		Type: \tab Package\cr
-		Version: \tab 1.0\cr
-		Date: \tab 2012-07-12\cr
+		Version: \tab 1.1\cr
+		Date: \tab 2012-09-19\cr
 		License: \tab GPL-2\cr
 		LazyLoad: \tab yes\cr
 	}
 	
 	For a complete list of functions with individual help pages, use library(help="Actigraphy"). 
 	
-	Please refer to the directory "Actigraphy/doc" for the following additional documents: \cr
-	1. A package tutorial \cr
-	2. Wang et al. Journal of Circadian Rhythms 2011 Paper \cr
-	3. Figures and Example code from Wang et al. Journal of Circadian Rhythms 2011 \cr
+	Please refer to the directory "Actigraphy/doc" for an additional tutorials \cr
+	and a document containing the code for the figures in the referenced paper. \cr
+	
+	The paper can be downloaded from the Journal of Circadian Rhythms website. \cr
 }
 \author{
 William Shannon, Tao Li, Hong Xian, Jia Wang, Elena Deych, Carlos Gonzalez \cr

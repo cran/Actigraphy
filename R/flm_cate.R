@@ -1,5 +1,5 @@
 flm_cate <-
-function (FD, basistype = "fourier", nbasis = 9){
+function (FD, basistype="fourier", nbasis=9, norder=4){
     if (missing(FD)) 
         stop("Error: FD is missing")
 
@@ -12,7 +12,7 @@ npt <- ncol(fd$y)
 if(tolower(basistype) == "fourier"){
 fbase <- create.fourier.basis(rangeval=c(0,L), nbasis)
 }else if(tolower(basistype) == "bspline"){
-fbase <- create.bspline.basis(rangeval=c(0,L), nbasis)
+fbase <- create.bspline.basis(rangeval=c(0,L), nbasis, norder)
 }else{
 stop("basistype must be 'fourier' or 'bspline'.")
 }
@@ -36,6 +36,6 @@ resid2 <- fd$y - preact2[,1:npt]
 sigma2 <- cov(t(resid2))
 fregstd2 <- fRegress.stderr(freg2, fd$y2cMap, sigma2)
 
-    geft <- list(freg = freg2, fregstd = fregstd2)
+geft <- list(freg = freg2, fregstd = fregstd2)
     return(geft)
 }
