@@ -3,12 +3,13 @@
 \title{Functional Linear Model Analysis}
 \description{A function that does functional linear model analysis.}
 \usage{
-flm_cate(FD, basistype="fourier", nbasis=9)
+flm_cate(FD, basistype="fourier", nbasis=9, norder=4)
 }
 \arguments{
   \item{FD}{The list from the function \code{fda.smoothdata}.}
   \item{basistype}{A string specifying either \code{"fourier"} and \code{"bspline"}.}
   \item{nbasis}{The number of basis functions to be used for functional linear model analysis.  Default value is 9.}
+  \item{norder}{an integer specifying the order of b-splines, which is one higher than their degree. The default of 4 gives cubic splines.}
 }
 
 \value{
