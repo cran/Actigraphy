@@ -13,6 +13,7 @@
 First we need to load the \texttt{Actigraphy} package:
 <<>>=
 library(Actigraphy)
+library(fda)
 @
 
 \section{Figure 1(a)}

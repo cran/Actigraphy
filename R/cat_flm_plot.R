@@ -2,7 +2,7 @@ cat_flm_plot <-
 function(smoothdata, matchresults, flmresults, ftest, nperm, lb, xat, 
 varname, col, ylim, L, xlab="Time", ylab="Activity"){
 geft <- flmresults
-maintitle <- paste("Activity~",varname,sep="")
+maintitle<- paste(ylab,"~",varname,sep="")
 leg <- names(matchresults$cov)[-1]
 
 par(mfrow=c(2,1), mar=c(4,4,3,1))

@@ -41,21 +41,24 @@ ahi$ahicat <- as.factor(ifelse(ahi$AHI >= 0 & ahi$AHI <= 5, 1,
 				ifelse(ahi$AHI > 15 & ahi$AHI <= 30, 3,
 				ifelse(ahi$AHI > 30, 4, 0)))))
 
-matchid <- fda.matchid(mat=data, acov=ahi[,-2] , type="factor",
-		grouplab=c("normal", "mild", "moderate", "severe"))
-FDcatahi <- fda.smoothdata(matchid, nbasis=9, basistype="fourier")
-
-geftFDcatahi <- flm_cate(FDcatahi, nbasis=9, basistype="fourier") 
+matchidb <- fda.matchid(mat=data, acov=ahi[,-2] , type="factor",
+		grouplab=c('normal', 'mild', 'moderate', 'severe'))
+FDcatahi <- fda.smoothdata(matchidb, nbasis=9, basistype="Fourier")
 
 L <- nrow(data)
 lb <- c("Midnight", "6AM", "Noon", "6PM", "Midnight") 
 xat <- c(0, L/4, L/2, 3*L/4, L)
 
-ylim <- c(0, max(predict(geftFDcatahi$freg$yhatfdobj)) + 100)
+geftFDcatahi <- flm_cate(FDcatahi, nbasis=9, basistype="Fourier")
+predy <- as.vector(geftFDcatahi$freg$yhatfdobj$y)
 
-cat_flm_plot(smoothdata=FDcatahi, matchresults=matchid, 
-	flmresults=geftFDcatahi, ftest=TRUE, nperm=5, lb=lb, 
-	xat=xat, varname="AHI", col=c(1:4), ylim=ylim, L=L)
+xlim <- c(0, L) 
+ylim <- c(min(predy), max(predy) + 100)
+
+cat.flm.results=cat_flm_plot(smoothdata=FDcatahi, matchresults=matchidb, 
+		flmresults=geftFDcatahi, ylab="Activity", ftest=TRUE, nperm=5, 
+		lb=lb, xat=xat, varname="AHI", col=c(1:4), 
+		ylim=ylim, L=L)
 }
 
 

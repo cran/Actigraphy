@@ -51,7 +51,7 @@ xlab <- "argvals"
 xlab <- names(yhat$fdnames)[1]
 }
 
-plot(argvals, Fvals, type="l", ylim=ylims, col=2, lwd=2, xlab=xlab, 
+plot(argvals, Fvals, type="l", ylim=ylims, col=2, lwd=2, xlab=" ", 
 ylab="F-statistic", main="Permutation F-Test", ...)
 lines(argvals, qvals.pts, lty=3, col=4, lwd=2)
 abline(h=qval, lty=2, col=4, lwd=2)
