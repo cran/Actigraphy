@@ -4,7 +4,7 @@
 \title{Plot Functional Linear Model Analysis Results of a Continuous Type}
 \description{This function produces two plots: An effect of a continuous covariate on activity values by time and the F-test for the effect of the continuous covariate.}
 \usage{cont_flm_plot(smoothdata, matchresults, flmresults, xlim, ylim, 
-	ftest, nperm, lb, xat, yboxlow, yboxhigh, ytext, labelp, L, 
+	ftest, nperm, lb, xat, legendx, legendy, L, 
 	xlab="Time", ylab="Activity")
 }
 
@@ -18,10 +18,8 @@
   \item{nperm}{The number of permutations for the F-test.}
   \item{lb}{X-axis labels.}
   \item{xat}{X axis label positions.}
-  \item{yboxlow}{Y axis position of the lower edge of the legend box.}
-  \item{yboxhigh}{Y axis position of the upper edge of the legend box.}
-  \item{ytext}{Y axis position of the scale values of the legend box}
-  \item{labelp}{Y axis position of the predictor variable label on the legend box.}
+  \item{legendx}{X axis position of the left edge of the legend box.}
+  \item{legendy}{Y axis position of the upper edge of the legend box.}
   \item{L}{The length of the time points.}
   \item{xlab}{The label for the x-axis.}
   \item{ylab}{The label for the y-axis.}
@@ -39,27 +37,24 @@ colnames(act_29pt) <- sub("X", "", colnames(act_29pt))
 data <- as.matrix(act_29pt[,-1])
 
 matchid  <- fda.matchid(mat=data, acov=clinic_29pt_ahi, type="contin")
-FDcont <- fda.smoothdata(matchid, nbasis=9, basistype="fourier")
+FDcont <- fda.smoothdata(matchid, nbasis=9, basistype="Fourier")
 
-geftFDcont <- flm_cate(FDcont, basistype="fourier", nbasis=9)
-		
 L <- nrow(data)
 lb <- c("Midnight", "6AM", "Noon", "6PM", "Midnight") 
 xat <- c(0, L/4, L/2, 3*L/4, L)
 
-predictedFLM <- predict(geftFDcont$freg$yhatfdobj)
-maxFLM <- max(predictedFLM)
+geftFDcont <- flm_cate(FDcont, nbasis=9, basistype="Fourier")
+predy <- as.vector(geftFDcont$freg$yhatfdobj$y)
 
 xlim <- c(0, L) 
-ylim <- c(min(predictedFLM), maxFLM + 100)
+ylim <-  c(min(predy), max(predy) + 100)
 
-yboxlow <- maxFLM - 100 
-yboxhigh <- maxFLM
-ytext <- maxFLM + 20
-labelp <-maxFLM - 110
+legendx <- 0
+legendy <- max(predy) - 100
 
-cont_flm_plot(smoothdata=FDcont, matchresults=matchid, 
-	flmresults=geftFDcont, xlim=xlim, ylim=ylim, ftest=TRUE, 
-	nperm=10, lb=lb, xat=xat, yboxlow=yboxlow, 
-	yboxhigh=yboxhigh, ytext=ytext, labelp=labelp, L=L)
+cont.flm.results <- cont_flm_plot(smoothdata=FDcont, 
+		matchresults=matchid, flmresults=geftFDcont, xlim=xlim, 
+		ylim=ylim, ftest=TRUE, nperm=10, lb=lb, xat=xat, 
+		legendx=legendx, legendy=legendy, L=L, 
+		xlab="Time", ylab="Activity")
 }

@@ -55,7 +55,7 @@ ts.plot(predict(FDinterest$fd$fd, c(1:L)),
 
 6. Apply FLM to the data with the \texttt{flm\_cate} function:
 <<>>=
-geftinterest <- flm_cate(FDinterest, nbasis=9, basistype="Fourier")
+geftFDcont <- flm_cate(FDinterest, nbasis=9, basistype="Fourier")
 @
 
 
@@ -65,33 +65,28 @@ geftinterest <- flm_cate(FDinterest, nbasis=9, basistype="Fourier")
 \item ylim is a vector of length 2 that contains the Y-axis boundries based on the results on the \texttt{flm\_cate} function
 \item lb is a vector of labels for the X-axis
 \item xat is a vector of positions for the labels (lb) on the X-axis
-\item yboxlow is the lower edge of the legend
-\item yboxhigh is the upper edge of the legend
-\item ytext is the location of the values on the legend
-\item labelp is the location of the variable label
+\item legendx is the x-axis position of the left edge of the legend box
+\item legendy is the y-axis position of the upper edge of the legend box
 \end{itemize}
 <<>>=
-predictedFLM <- predict(geftinterest$freg$yhatfdobj)
-maxFLM <- max(predictedFLM)
+predy <- as.vector(geftFDcont$freg$yhatfdobj$y)
 ###
 xlim <- c(0, L) 
-ylim <- c(min(predictedFLM), maxFLM + 100) 
+ylim <- c(min(predy), max(predy) + 100) 
 lb <- c("Midnight", "6AM", "Noon", "6PM", "Midnight") 
 xat <- c(0, L/4, L/2, 3*L/4, L)
 ###
-yboxlow <- maxFLM - 100 
-yboxhigh <- maxFLM
-ytext <- maxFLM + 20
-labelp <- maxFLM - 110
+legendx <- 0
+legendy <- max(predy) - 100
 @
 
 
 8. Plot results from FLM results and F-test if indicated (with the continuous flm plotting function):
 <<results=hide>>=
 cont_flm_plot(smoothdata=FDinterest, matchresults=matchid, 
-	flmresults=geftinterest, xlim=xlim, ylim=ylim, ftest=TRUE, 
-	nperm=10, lb=lb, xat=xat, yboxlow=yboxlow, 
-	yboxhigh=yboxhigh, ytext=ytext, labelp=labelp, L=L)
+	flmresults=geftFDcont, xlim=xlim, ylim=ylim, ftest=TRUE, 
+	nperm=10, lb=lb, xat=xat, legendx=legendx, 
+	legendy=legendy, L=L)
 @
 
 
