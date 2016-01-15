@@ -1,23 +1,15 @@
-%\VignetteIndexEntry{Figures from Reference Paper}
-\documentclass[a4paper]{article}
+### R code from vignette source 'Figures-from-Referenced-Paper.Rnw'
 
-\title{Examples and Figures from Wang et al. Journal of Circadian Rhythms 2011}
-\author{Carlos Gonzalez, Berkley Shands, Elena Deych, William Shannon}
-
-\SweaveOpts{keep.source=TRUE}
-\begin{document}
-
-
-\maketitle
-
-First we need to load the \texttt{Actigraphy} package:
-<<>>=
+###################################################
+### code chunk number 1: Figures-from-Referenced-Paper.Rnw:14-16
+###################################################
 	library(Actigraphy)
 	library(lattice)
-@
 
-\section{Figure 1(a)}
-<<results=hide>>=
+
+###################################################
+### code chunk number 2: Figures-from-Referenced-Paper.Rnw:20-46
+###################################################
 	### Load Data 
 	data(weekday) 
 	
@@ -44,11 +36,11 @@ First we need to load the \texttt{Actigraphy} package:
 			fd <- smooth.basis(c(1:L), y, fpar) 
 			panel.xyplot(x, y, type="h") 
 		}) 
-@
 
 
-\section{Figure 2}
-<<results=hide>>=
+###################################################
+### code chunk number 3: Figures-from-Referenced-Paper.Rnw:51-84
+###################################################
 	### Load Data 
 	data(act_8pt) 
 	data(clinic_8pt) 
@@ -82,11 +74,11 @@ First we need to load the \texttt{Actigraphy} package:
 			panel.xyplot(x, y, col=1, cex=0.1) 
 			panel.lines(predict(sm$fd,c(1:L)), col=2, lwd=3) 
 		}) 
-@
 
 
-\section{Figure 3}
-<<results=hide>>=
+###################################################
+### code chunk number 4: Figures-from-Referenced-Paper.Rnw:89-155
+###################################################
 	### Load Data 
 	data(act_8pt) 
 	data(clinic_8pt) 
@@ -153,6 +145,5 @@ First we need to load the \texttt{Actigraphy} package:
 	
 	Fratio <- Ftest(fd$fd, xfdlist, betalist, argvals = c(1:1440),  nperm=10, xaxt="n") 
 	axis(1, at=xat, labels=lb) 
-@
 
-\end{document}
+

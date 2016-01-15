@@ -1,10 +1,11 @@
 \name{flm_cate}
 \alias{flm_cate}
 \title{Functional Linear Model Analysis}
+
 \description{A function that does functional linear model analysis.}
-\usage{
-flm_cate(FD, basistype="fourier", nbasis=9, norder=4)
-}
+
+\usage{flm_cate(FD, basistype="fourier", nbasis=9, norder=4)}
+
 \arguments{
   \item{FD}{The list from the function \code{fda.smoothdata}.}
   \item{basistype}{A string specifying either \code{"fourier"} and \code{"bspline"}.}
@@ -13,23 +14,24 @@ flm_cate(FD, basistype="fourier", nbasis=9, norder=4)
 }
 
 \value{
-A list consisting of three components as follows:
-  \item{freg}{A \code{fRegress} fit object containing the intercept and coefficient functions (check function \code{fRegress} for details)}
-  \item{fregstd}{A list containing the standard error functions of the intercept and coefficient functions.} 
+	A list consisting of three components as follows:
+		\item{freg}{A \code{fRegress} fit object containing the intercept and coefficient functions (check function \code{fRegress} for details)}
+		\item{fregstd}{A list containing the standard error functions of the intercept and coefficient functions.} 
 }
-\author{William Shannon, Tao Li, Hong Xian, Jia Wang, Elena Deych, Carlos Gonzalez}
+
+\author{William D. Shannon, Tao Li, Hong Xian, Jia Wang, Elena Deych, Carlos Gonzalez}
 
 \examples{
-data(act_29pt)
-data(clinic_29pt_ahi)
-
-colnames(act_29pt) <- sub("X", "", colnames(act_29pt)) 
-data <- as.matrix(act_29pt[,-1])
-
-matchid  <- fda.matchid(mat=data, acov=clinic_29pt_ahi, type="contin")
-FDcont <- fda.smoothdata(matchid, nbasis=9, basistype="fourier")
-
-geftFDcont <- flm_cate(FDcont, basistype="fourier", nbasis=9)
+	data(act_29pt)
+	data(clinic_29pt_ahi)
+	
+	colnames(act_29pt) <- sub("X", "", colnames(act_29pt)) 
+	data <- as.matrix(act_29pt[,-1])
+	
+	matchid  <- fda.matchid(data, clinic_29pt_ahi, "contin")
+	FDcont <- fda.smoothdata(matchid)
+	
+	geftFDcont <- flm_cate(FDcont)
 }
 
 

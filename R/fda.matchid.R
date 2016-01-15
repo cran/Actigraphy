@@ -1,7 +1,7 @@
 fda.matchid <-
-function (mat, acov, type, grouplab) {
-if(missing(mat) || missing(acov)) 
-stop("Missing mat and/or acov")
+function(mat, acov, type, grouplab){
+if(missing(mat) || missing(acov) || missing(type)) 
+stop("Missing Arguments")
 if(class(mat) != "data.frame" && class(mat) != "matrix") 
 stop("mat must be a data.frame or a matrix")
 if(class(acov) != "data.frame" && class(acov) != "matrix") 
@@ -16,7 +16,7 @@ colnames(mat) <- coln
 }
 numcolnames <- coln
 
-acov <- acov[!is.na(acov[[2]]), ]
+acov <- acov[!is.na(acov[[2]]),]
 id <- acov[[1]]
 bthnum <- is.numeric(id) + is.numeric(coln)
 
@@ -27,27 +27,27 @@ sltmat <- as.matrix(mat[, charmatch(as.numeric(commonid), as.numeric(numcolnames
 commonid <- intersect(as.character(id), as.character(numcolnames))
 sltmat <- as.matrix(mat[, charmatch(commonid, numcolnames)])
 }
-acov <- acov[charmatch(commonid, id), ]
+acov <- acov[charmatch(commonid, id),]
 
-if (length(commonid) < 1)
-stop("Error: IDs do not match")
+if(length(commonid) < 1)
+stop("IDs do not match")
 
 a <- acov
 if(tolower(type) == "factor"){
 a[[2]] <- as.factor(a[[2]])
-
 m <- data.frame(id=a[[1]], model.matrix(~a[[2]]))
+
+if(missing(grouplab))
+stop("grouplab is required for 'factor' type.")
 colnames(m) <- c("id", grouplab)
 }else if(tolower(type) == "contin"){
 a[[2]] <- as.numeric(a[[2]])
-
 m <- data.frame(id=a[[1]], model.matrix(~a[[2]]))
 contcovname <- names(a[2])
 colnames(m) <- c("id", "intercept", paste(contcovname))
 }else{
-stop("type must be 'factor' or 'contin' type.")
+stop("type must be 'factor' or 'contin'.")
 }
 
-acov2 <- m
-return(list(mat = sltmat, cov = acov2))
+return(list(mat=sltmat, cov=m))
 }

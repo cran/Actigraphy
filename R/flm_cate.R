@@ -1,7 +1,7 @@
 flm_cate <-
-function (FD, basistype="fourier", nbasis=9, norder=4){
+function(FD, basistype="fourier", nbasis=9, norder=4){
     if (missing(FD)) 
-        stop("Error: FD is missing")
+        stop("Missing FD")
 
 cov <- FD$cov[,-1]
 grp <- ncol(cov)
@@ -36,6 +36,5 @@ resid2 <- fd$y - preact2[,1:npt]
 sigma2 <- cov(t(resid2))
 fregstd2 <- fRegress.stderr(freg2, fd$y2cMap, sigma2)
 
-geft <- list(freg = freg2, fregstd = fregstd2)
-    return(geft)
+    return(list(freg=freg2, fregstd=fregstd2))
 }

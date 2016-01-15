@@ -1,11 +1,11 @@
 \name{cont_flm_plot}
 \alias{cont_flm_plot}
-
 \title{Plot Functional Linear Model Analysis Results of a Continuous Type}
+
 \description{This function produces two plots: An effect of a continuous covariate on activity values by time and the F-test for the effect of the continuous covariate.}
+
 \usage{cont_flm_plot(smoothdata, matchresults, flmresults, xlim, ylim, 
-	ftest, nperm, lb, xat, legendx, legendy, L, 
-	xlab="Time", ylab="Activity")
+	ftest, nperm, lb, xat, legendx, legendy, L, xlab="Time", ylab="Activity")
 }
 
 \arguments{
@@ -27,34 +27,31 @@
 
 \value{One plot of the estimated group means and a possible second plot of the F-test results.}
 
-\author{William Shannon, Tao Li, Hong Xian, Jia Wang, Elena Deych, Carlos Gonzalez}
+\author{William D. Shannon, Tao Li, Hong Xian, Jia Wang, Elena Deych, Carlos Gonzalez}
 
 \examples{
-data(act_29pt)
-data(clinic_29pt_ahi)
-
-colnames(act_29pt) <- sub("X", "", colnames(act_29pt)) 
-data <- as.matrix(act_29pt[,-1])
-
-matchid  <- fda.matchid(mat=data, acov=clinic_29pt_ahi, type="contin")
-FDcont <- fda.smoothdata(matchid, nbasis=9, basistype="Fourier")
-
-L <- nrow(data)
-lb <- c("Midnight", "6AM", "Noon", "6PM", "Midnight") 
-xat <- c(0, L/4, L/2, 3*L/4, L)
-
-geftFDcont <- flm_cate(FDcont, nbasis=9, basistype="Fourier")
-predy <- as.vector(geftFDcont$freg$yhatfdobj$y)
-
-xlim <- c(0, L) 
-ylim <-  c(min(predy), max(predy) + 100)
-
-legendx <- 0
-legendy <- max(predy) - 100
-
-cont.flm.results <- cont_flm_plot(smoothdata=FDcont, 
-		matchresults=matchid, flmresults=geftFDcont, xlim=xlim, 
-		ylim=ylim, ftest=TRUE, nperm=10, lb=lb, xat=xat, 
-		legendx=legendx, legendy=legendy, L=L, 
-		xlab="Time", ylab="Activity")
+	data(act_29pt)
+	data(clinic_29pt_ahi)
+	
+	colnames(act_29pt) <- sub("X", "", colnames(act_29pt)) 
+	data <- as.matrix(act_29pt[,-1])
+	
+	matchid  <- fda.matchid(data, clinic_29pt_ahi, "contin")
+	FDcont <- fda.smoothdata(matchid)
+	
+	L <- nrow(data)
+	lb <- c("Midnight", "6AM", "Noon", "6PM", "Midnight") 
+	xat <- c(0, L/4, L/2, 3*L/4, L)
+	
+	geftFDcont <- flm_cate(FDcont)
+	predy <- as.vector(geftFDcont$freg$yhatfdobj$y)
+	
+	xlim <- c(0, L) 
+	ylim <-  c(min(predy), max(predy) + 100)
+	
+	legendx <- 0
+	legendy <- max(predy) - 100
+	
+	cont.flm.results <- cont_flm_plot(FDcont, matchid, geftFDcont, xlim, 
+		ylim, TRUE, 10, lb, xat, legendx, legendy, L)
 }

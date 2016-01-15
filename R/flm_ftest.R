@@ -1,6 +1,8 @@
 flm_ftest <-
-function(FD, basistype="fourier", nbasis=9, norder=4, ftest=TRUE, 
-nperm=1000, xat, lb, mul=1) { 
+function(FD, basistype="fourier", nbasis=9, norder=4, ftest=TRUE, nperm=1000, xat, lb, mul=1){ 
+if(missing(FD)) 
+stop("Missing FD")
+
 cov <- FD$cov[,-1]
 grp <- ncol(cov)
 fd <- FD$fd
@@ -35,11 +37,9 @@ fregstd2 <- fRegress.stderr(freg2, fd$y2cMap, sigma2)
 
 Fratio <- NULL
 if(ftest){
-Fratio <- Ftest(fd$fd, xfdlist, betalist, argvals=c(1:L), nperm=nperm, 
-xaxt="n", mul=mul) 
+Fratio <- Ftest(fd$fd, xfdlist, betalist, NULL, nperm, 1:L, xaxt="n", mul=mul) 
 axis(1, at=xat, labels=lb)
 }
 
-geft <- list(freg=freg2, fregstd=fregstd2, Fratio=Fratio)
-return(geft)
+return(list(freg=freg2, fregstd=fregstd2, Fratio=Fratio))
 }

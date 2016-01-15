@@ -1,5 +1,8 @@
 fda.smoothdata <-
-function(data, basistype="fourier", nbasis=9, norder=4) {
+function(data, basistype="fourier", nbasis=9, norder=4){
+if(missing(data)) 
+stop("Missing data")
+
 mat <- data$mat
 cov <- data$cov
 L <- nrow(mat)

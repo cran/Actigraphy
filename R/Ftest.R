@@ -1,16 +1,17 @@
 Ftest <-
-function (yfdPar, xfdlist, betalist, wt=NULL, nperm=1000, argvals=NULL, 
-q=0.05, plotres=TRUE, mul=1, ...) {
+function(yfdPar, xfdlist, betalist, wt=NULL, nperm=1000, argvals=NULL, q=0.05, plotres=TRUE, mul=1, ...){
+if(missing(yfdPar) || missing(xfdlist) || missing(betalist)) 
+stop("Missing Arguments")
+
 set.seed <- 123456789
 Fnull <- rep(0, nperm)
 Fnullvals <- c()
 q <- 1 - q
 begin <- proc.time()
 fRegressList <- fRegress(yfdPar, xfdlist, betalist)
-elapsed.time <- max(proc.time() - begin, na.rm = TRUE)     
+elapsed.time <- max(proc.time() - begin, na.rm=TRUE)     
 print(paste("Permutation F test running (", nperm, " permutations)", sep=""))
-print(paste("Estimated Computing time = ", round(nperm * elapsed.time), 
-" seconds", sep=""))
+print(paste("Estimated Computing time = ", round(nperm * elapsed.time), " seconds", sep=""))
 
 yhat <- fRegressList$yhatfdobj
 if(is.list(yhat) && ("fd" %in% names(yhat))) 
@@ -51,15 +52,12 @@ xlab <- "argvals"
 xlab <- names(yhat$fdnames)[1]
 }
 
-plot(argvals, Fvals, type="l", ylim=ylims, col=2, lwd=2, xlab=" ", 
-ylab="F-statistic", main="Permutation F-Test", ...)
+plot(argvals, Fvals, type="l", ylim=ylims, col=2, lwd=2, xlab=" ", ylab="F-statistic", main="Permutation F-Test", ...)
 lines(argvals, qvals.pts, lty=3, col=4, lwd=2)
 abline(h=qval, lty=2, col=4, lwd=2)
-legendstr <- c("Observed Statistic", paste("pointwise", 1 - q, 
-"critical value"), paste("maximum", 1 - q, "critical value"))
-legend("topleft", legend=legendstr, col=c(2,4,4), lty=c(1, 3, 2), 
-lwd=c(2,2,2), cex=0.8)
-} else {
+legendstr <- c("Observed Statistic", paste("pointwise", 1 - q, "critical value"), paste("maximum", 1 - q, "critical value"))
+legend("topleft", legend=legendstr, col=c(2,4,4), lty=c(1, 3, 2), lwd=c(2,2,2), cex=0.8)
+}else{
 xlims <- c(min(c(Fnull, Fobs)), max(c(Fnull, Fobs)))
 hstat <- hist(Fnull, xlim=xlims, lwd=2, xlab="F-value", main="Permutation F-Test")
 abline(v=Fobs, col=1, lwd=2)
