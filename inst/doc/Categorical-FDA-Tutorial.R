@@ -17,15 +17,7 @@
 
 
 ###################################################
-### code chunk number 3: Categorical-FDA-Tutorial.Rnw:33-36
-###################################################
-	covariate <- na.omit(covariate)
-	activity <- as.matrix(activity[,-1])
-	colnames(activity) <- sub("X", "", colnames(activity))
-
-
-###################################################
-### code chunk number 4: Categorical-FDA-Tutorial.Rnw:42-47
+### code chunk number 3: Categorical-FDA-Tutorial.Rnw:32-37
 ###################################################
 	covariate$ahicat <- as.factor(
 		ifelse(covariate$AHI >= 0 & covariate$AHI <= 5, 1, 
@@ -35,27 +27,27 @@
 
 
 ###################################################
-### code chunk number 5: Categorical-FDA-Tutorial.Rnw:53-54
+### code chunk number 4: Categorical-FDA-Tutorial.Rnw:43-44
 ###################################################
 	matchid <- fda.matchid(activity, covariate[,-2], "factor", c("normal", "mild", "moderate", "severe"))
 
 
 ###################################################
-### code chunk number 6: Categorical-FDA-Tutorial.Rnw:62-65
+### code chunk number 5: Categorical-FDA-Tutorial.Rnw:52-55
 ###################################################
 	L <- nrow(activity)
 	FDinterest <- fda.smoothdata(matchid)
-	ts.plot(predict(FDinterest$fd$fd, c(1:L)), main="Smoothed Activity Data")
+	ts.plot(predict(FDinterest$fd$fd, 1:L), main="Smoothed Activity Data")
 
 
 ###################################################
-### code chunk number 7: Categorical-FDA-Tutorial.Rnw:70-71
+### code chunk number 6: Categorical-FDA-Tutorial.Rnw:60-61
 ###################################################
 	geftinterest <- flm_cate(FDinterest)
 
 
 ###################################################
-### code chunk number 8: Categorical-FDA-Tutorial.Rnw:81-85
+### code chunk number 7: Categorical-FDA-Tutorial.Rnw:71-75
 ###################################################
 	ypred <- as.vector(geftinterest$freg$yhatfdobj$y)
 	ylim <- c(0, max(ypred) + 100)
@@ -64,7 +56,7 @@
 
 
 ###################################################
-### code chunk number 9: Categorical-FDA-Tutorial.Rnw:91-92
+### code chunk number 8: Categorical-FDA-Tutorial.Rnw:81-82
 ###################################################
 	cat.flm.results <- cat_flm_plot(FDinterest, matchid, geftinterest, TRUE, 5, lb, xat, "AHI", 1:4, ylim, L)
 
